@@ -177,6 +177,3 @@ intelligence feeds, and move the event log to a streaming store (Kafka / Postgre
 
 - `docs/SecureBank_Features_Summary.docx` — a full walkthrough of every feature and screen.
 
-## License
-
-Released under the [MIT License](LICENSE). Update the copyright line with your name or team name.
