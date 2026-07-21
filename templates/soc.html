@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOC — Correlated Telemetry</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="soc-body">
+  <div class="soc-head">
+    <h1>SOC · Correlated Telemetry &amp; Transaction Feed</h1>
+    <div>
+      <a href="{{ url_for('breach_scan') }}" style="margin-right:18px;">Breach monitor</a>
+      <a href="{{ url_for('dashboard') }}">← back to banking app</a>
+    </div>
+  </div>
+
+  <div class="soc-table-wrap">
+    <table class="soc">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>User</th>
+          <th>Session</th>
+          <th>Action</th>
+          <th>Security signals</th>
+          <th>Transaction</th>
+          <th>Risk</th>
+          <th>Correlated reasons</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in events %}
+        <tr>
+          <td class="mono">{{ e.ts.strftime("%H:%M:%S") if e.ts }}</td>
+          <td>{{ e.username }}</td>
+          <td class="mono">{{ e.session_id[:8] if e.session_id }}</td>
+          <td>{{ e.action }}</td>
+          <td>
+            {% if e.action.startswith('login') %}
+              <span class="mono">{{ e.geo or '—' }}</span>
+              {% if e.is_new_device %}<span class="warnflag"> · new device</span>{% endif %}
+              {% if e.is_unusual_location %}<span class="warnflag"> · unusual loc</span>{% endif %}
+              {% if e.impossible_travel %}<span class="warnflag"> · impossible travel</span>{% endif %}
+              {% if e.used_vpn %}<span class="warnflag"> · VPN</span>{% endif %}
+              {% if e.credentials_breached %}<span class="warnflag"> · breached creds</span>{% endif %}
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            {% if e.action == 'transfer' %}
+              ₹{{ "{:,.0f}".format(e.amount) }} → {{ e.beneficiary_name }}
+              {% if e.is_new_beneficiary %}<span class="warnflag"> · new payee</span>{% endif %}
+            {% elif e.action == 'add_beneficiary' %}
+              + {{ e.beneficiary_name }}
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            {% if e.risk_level %}
+              <span class="pill {{ e.risk_level }}">{{ e.risk_level }} {{ e.risk_score }}</span>
+              {% if e.action_taken %}<div class="mono">{{ e.action_taken }}</div>{% endif %}
+            {% else %}—{% endif %}
+          </td>
+          <td class="reason-cell">{{ e.risk_reasons or '' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="mono">No events yet. Use the banking app to generate telemetry.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

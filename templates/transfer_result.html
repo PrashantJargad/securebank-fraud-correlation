@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Transfer result — SecureBank{% endblock %}
+{% block content %}
+
+<div class="verdict {{ level }}">
+  <h1>
+    {% if taken == 'blocked' %}Transaction held for review
+    {% elif taken == 'flagged' %}Transfer completed — flagged
+    {% else %}Transfer completed{% endif %}
+  </h1>
+  <div class="score">Risk score: {{ score }} &middot; {{ level }}</div>
+  <ul class="reasons">
+    {% for r in reasons %}<li>{{ r }}</li>{% endfor %}
+  </ul>
+</div>
+
+<div class="card">
+  {% if executed %}
+    <p>₹{{ "{:,.2f}".format(amount) }} sent to <strong>{{ ben.name }}</strong>
+       (A/C {{ ben.account_number }}).</p>
+    {% if credited %}
+      <p class="sub">Credited to <strong>{{ recipient.username }}</strong>'s account.
+         Log in as {{ recipient.username }} to see the balance go up.</p>
+    {% else %}
+      <p class="sub">This account number isn't held at SecureBank, so it was sent
+         as an external transfer — the amount left your balance but isn't tracked
+         inside this demo.</p>
+    {% endif %}
+    <p class="sub">Your new balance: ₹{{ "{:,.2f}".format(user.balance) }}</p>
+  {% else %}
+    <p>The transfer of ₹{{ "{:,.2f}".format(amount) }} to
+       <strong>{{ ben.name }}</strong> was not completed.</p>
+    <p class="sub">
+      Correlated signals across this session pushed the risk above the block
+      threshold. In production this is where a step-up check (OTP, call-back,
+      or manual review) would run before the money moves.
+    </p>
+  {% endif %}
+  <a class="btn secondary" href="{{ url_for('dashboard') }}">Back to dashboard</a>
+  <a class="btn secondary" href="{{ url_for('soc') }}">See it in the SOC view</a>
+</div>
+{% endblock %}

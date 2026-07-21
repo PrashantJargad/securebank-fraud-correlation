@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Beneficiaries — SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Add a beneficiary</h1>
+  <p class="sub">New payees are watched more closely for the first 24 hours.</p>
+  <form method="post" action="{{ url_for('beneficiaries') }}">
+    <label for="name">Beneficiary name</label>
+    <input id="name" name="name" placeholder="e.g. Priya Sharma">
+
+    <label for="account_number">Account number</label>
+    <input id="account_number" name="account_number" placeholder="e.g. 9876543210">
+
+    <button class="btn" type="submit">Add beneficiary</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Your beneficiaries</h2>
+  <ul class="list">
+    {% for b in beneficiaries %}
+      <li>
+        <div>
+          <div>{{ b.name }}</div>
+          <div class="meta">A/C {{ b.account_number }}</div>
+        </div>
+        <div class="meta">added {{ b.created_at.strftime("%d %b %Y") }}</div>
+      </li>
+    {% else %}
+      <li><span class="meta">No beneficiaries yet.</span></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

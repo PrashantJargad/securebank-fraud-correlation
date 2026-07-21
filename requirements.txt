@@ -1,0 +1,13 @@
+# Web framework
+Flask>=3.0.0
+Flask-SQLAlchemy>=3.1.0
+Werkzeug>=3.0.0
+
+# ML stack — version-flexible on purpose. Pinning exact old versions forces pip
+# to build from source on newer Python (no wheel available), which needs a C
+# compiler. These floors let pip fetch a prebuilt wheel for your Python.
+# If pip still tries to compile, force wheels:
+#   pip install --only-binary=:all: scikit-learn numpy joblib
+scikit-learn>=1.6.0
+numpy>=1.26.0
+joblib>=1.3.0

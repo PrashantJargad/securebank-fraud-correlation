@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SecureBank{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">SecureBank
+      <small>FinSpark correlation prototype</small>
+    </div>
+    <div class="navlinks">
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('dashboard') }}">Balance</a>
+        <a href="{{ url_for('beneficiaries') }}">Beneficiaries</a>
+        <a href="{{ url_for('transfer') }}">Transfer</a>
+        <a href="{{ url_for('soc') }}">SOC view</a>
+        <a href="{{ url_for('logout') }}">Log out</a>
+      {% else %}
+        <a href="{{ url_for('soc') }}">SOC view</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="wrap {% block wrapclass %}{% endblock %}">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash {{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

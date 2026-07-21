@@ -1,0 +1,27 @@
+# ── Python ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# ── Virtual environments ─────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Generated at runtime (recreated on first launch) ─────
+banking.db            # SQLite DB — rebuilt + reseeded on startup
+fraud_model.joblib    # trained model — retrained on first run
+training_data.csv     # synthetic dataset — regenerate with export_data.py
+
+# ── IDE / editor ─────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# ── Distribution ─────────────────────────────────────────
+build/
+dist/
+*.egg-info/

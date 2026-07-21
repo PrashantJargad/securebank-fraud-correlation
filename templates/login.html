@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Sign in — SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Sign in</h1>
+  <p class="sub">Access your SecureBank account.</p>
+
+  <form method="post" action="{{ url_for('login') }}">
+    <label for="username">Username</label>
+    <input id="username" name="username" autocomplete="off" placeholder="rahul">
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" placeholder="••••••••">
+
+    <label for="location">Signing in from (demo)</label>
+    <select id="location" name="location">
+      <option value="Jaipur">Jaipur</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Unknown location">Unknown location (foreign)</option>
+    </select>
+
+    <label style="display:flex; align-items:center; gap:8px; margin-top:16px;">
+      <input type="checkbox" name="used_vpn" value="1" style="width:auto;">
+      Connecting through a VPN (demo)
+    </label>
+
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+
+  <div class="hint">
+    Demo accounts (password <strong>password123</strong>):
+    <strong>rahul</strong> (Jaipur), <strong>priya</strong> (Mumbai),
+    <strong>amit</strong> (Delhi), <strong>landlord</strong> (Jaipur).
+    The location selector stands in for IP geolocation, which can't run on
+    localhost — signing in from anywhere other than the account's home city is
+    treated as unusual.
+  </div>
+</div>
+{% endblock %}

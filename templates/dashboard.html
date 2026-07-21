@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Welcome back, {{ user.username }}</h1>
+  <p class="sub">Home branch: {{ user.home_city }} &middot; Account {{ user.account_number }}</p>
+  <div class="balance-label">Available balance</div>
+  <div class="balance">₹{{ "{:,.2f}".format(user.balance) }}</div>
+</div>
+
+{% if breach %}
+<div class="card" style="border-left:4px solid var(--high);">
+  <h2 style="color:var(--high);">Security alert</h2>
+  <p class="sub" style="margin-bottom:0;">
+    Your credentials were found in a known data breach
+    ({{ breach.source }}). Transactions on this account are being monitored more
+    closely. We recommend changing your password.
+  </p>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Quick actions</h2>
+  <a class="btn secondary" href="{{ url_for('transfer') }}">Transfer funds</a>
+  <a class="btn secondary" href="{{ url_for('beneficiaries') }}">Manage beneficiaries</a>
+</div>
+{% endblock %}

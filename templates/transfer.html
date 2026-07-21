@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Transfer — SecureBank{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Transfer funds</h1>
+  <p class="sub">Available balance: ₹{{ "{:,.2f}".format(user.balance) }}</p>
+
+  {% if beneficiaries %}
+  <form method="post" action="{{ url_for('transfer') }}">
+    <label for="beneficiary_id">To beneficiary</label>
+    <select id="beneficiary_id" name="beneficiary_id">
+      {% for b in beneficiaries %}
+        <option value="{{ b.id }}">{{ b.name }} — A/C {{ b.account_number }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="amount">Amount (₹)</label>
+    <input id="amount" name="amount" type="number" step="0.01" min="1" placeholder="0.00">
+
+    <button class="btn" type="submit">Send money</button>
+  </form>
+  {% else %}
+    <p class="sub">Add a beneficiary first.</p>
+    <a class="btn secondary" href="{{ url_for('beneficiaries') }}">Add beneficiary</a>
+  {% endif %}
+</div>
+{% endblock %}

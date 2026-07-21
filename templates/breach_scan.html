@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breach Monitor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="soc-body">
+  <div class="soc-head">
+    <h1>Breach Monitor · Automated Credential Exposure Scan</h1>
+    <a href="{{ url_for('soc') }}">← SOC feed</a>
+  </div>
+
+  <div class="soc-table-wrap">
+    <p class="mono" style="margin-bottom:18px;">
+      Cross-referencing all bank customers against external breach intelligence,
+      matched on hashed email / phone (plaintext never compared). Matched
+      customers are added to the watchlist and flagged as credential-breached at
+      their next login.
+    </p>
+
+    <table class="soc">
+      <thead>
+        <tr>
+          <th>Breach source</th>
+          <th>Date</th>
+          <th>Leaked fields</th>
+          <th>Records checked</th>
+          <th>Our customers affected</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in report %}
+        <tr>
+          <td>{{ b.name }}</td>
+          <td class="mono">{{ b.date }}</td>
+          <td>{{ b.leaked_fields }}</td>
+          <td class="mono">{{ b.records_checked }}</td>
+          <td>
+            {% if b.matched_users %}
+              <span class="warnflag">{{ b.matched_users | join(", ") }}</span>
+            {% else %}
+              <span class="mono">none</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h1 style="color:#fff; font-size:15px; margin:26px 0 10px;">Current watchlist</h1>
+    <table class="soc">
+      <thead>
+        <tr><th>Customer</th><th>Reason on watchlist</th></tr>
+      </thead>
+      <tbody>
+        {% for w in watchlist %}
+        <tr>
+          <td>{{ w.identifier }}</td>
+          <td class="reason-cell">{{ w.source }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2" class="mono">Watchlist empty.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
